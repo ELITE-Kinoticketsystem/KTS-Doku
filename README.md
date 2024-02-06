@@ -1,14 +1,14 @@
 # KTS-Doku
-## Setup-Anleitung für das Kinoticket-System
+# Setup-Anleitung für das Kinoticket-System
 Diese Anleitung beschreibt zwei Methoden zur Einrichtung des Kinoticket-Systems: die Verwendung von Docker und Docker Compose sowie die lokale Einrichtung ohne Docker. Die Docker-Methode wird aufgrund ihrer Einfachheit und Nähe zum Produktionssystem bevorzugt.
 
-### Lokales Aufsetzen mit Docker
+## Lokales Aufsetzen mit Docker
 
-#### Voraussetzungen
+### Voraussetzungen
 * Docker und Docker Compose müssen auf Ihrem System installiert sein. Die Installationsanleitung variiert je nach Betriebssystem. Anleitungen finden Sie auf den offiziellen Docker-Webseiten für [Docker](https://docs.docker.com/desktop/install/mac-install/) und [Docker Compose](https://docs.docker.com/compose/install/).
 * Im Rootverzeichnis des Projekts müssen die Dateien docker-compose.yml und init-db.sql vorhanden sein. Der Inhalt der init-db.sql-Datei sollte der hier bereitgestellten [Datei](https://github.com/ELITE-Kinoticketsystem/Backend-KTS/blob/main/database_scripts/create_database.sql) entsprechen.
 
-#### Docker Compose Konfiguration
+### Docker Compose Konfiguration
 Die `docker-compose.yml` definiert die Konfiguration und die Orchestrierung der Container. Die Datei sollte wie folgt aussehen.
 
 ```
@@ -85,22 +85,70 @@ volumes:
   db_data:
 ```
 
-##### Services im Detail
+#### Services im Detail
 * MySQL-Container: Hostet die Datenbank. Initialisiert sich mit einem SQL-Skript für die erforderlichen Tabellen und Daten.
 * Adminer-Container: Ermöglicht die Verwaltung der Datenbank über einen Webbrowser.
 * Backend-Service: Wird in einem eigenen Container gehostet und startet erst, wenn die Datenbank verfügbar ist. Regelmäßige Gesundheitsprüfungen werden durchgeführt.
 * Frontend-Service: Wird in einem separaten Container bereitgestellt und startet erst, wenn das Backend funktionsfähig ist.
 
-#### Starten der Anwendung
+### Starten der Anwendung
 In dem Rootverzeichnis des Projekts den Befehl `docker-compose up -d` ausführen. Nach dem Start sind die Services über folgende Ports erreichbar:
 * Adminer: http://localhost:8089
 * Frontend: http://localhost
 * Backend: http://localhost:8080
 
-### Lokales Aufsetzen ohne Docker
-#### Datenbank
+## Lokales Aufsetzen ohne Docker
+### Datenbank
 * MySQL lokal installieren und das init-db.sql-Skript ausführen, um die erforderlichen Tabellen zu erstellen.
-#### Backend
+### Backend
 * Das Git-Repository Klonen und sicher stellen, dass Go installiert ist. `go mod download` ausführen, um die Abhängigkeiten herunterzuladen. Die `.env.example` in `.env` umbennen und die Umgebungsvariablen setzen. Um das Backend zu starten, das `set-and-run.sh` ausführen.
-#### Frontend
+### Frontend
 * Das Git-Repository Klonen und sicher stellen, dass Node.js und pnpm installiert sind. Die Variable apiUrl in der Datei authService.ts auf http://localhost:8080 setzen. Die Abhängigkeiten mit `pnpm install` und den Entwicklerserver mit `pnpm run dev` starten.
+
+
+# Pipelines
+In diesem Projekt wird Github Actions verwendet, um die Pipelines zu automatisieren. Diese Pipelines gewährleisten, dass der Code bei jedem Push oder Pull Request in den Hauptbranch automatisch getestet, gebaut und bereitgestellt wird.
+
+## Continuous Integration (CI)
+
+Die CI-Pipeline wird bei jedem `push` oder `pull_request` auf den `main`-Branch ausgelöst. Die Pipeline führt verschiedene Jobs aus, um die Qualität und Funktionalität des Codes sicherzustellen.
+
+### Jobs und Schritte
+
+1. **Build**
+   - **Umgebung:** Läuft auf einem Ubuntu-Server mit der neuesten Version.
+   - **Schritte:**
+     - **Checkout Code:** Der aktuelle Code wird ausgecheckt, um mit der Pipeline arbeiten zu können.
+     - **Set up Go:** Die Go-Umgebung wird mit einer spezifischen Version (1.21.5) eingerichtet.
+     - **Create `go.mod`:** Eine `go.mod`-Datei wird erstellt, und anschließend die Abhängigkeiten installiert.
+     - **Install Staticcheck:** Staticcheck, ein Werkzeug für statische Code-Analyse in Go, wird installiert.
+     - **Build project and verify dependencies:** Das Projekt wird gebaut, und die Abhängigkeiten werden verifiziert.
+     - **Verify Code Quality:** Die Code-Qualität wird durch `go vet` und Staticcheck überprüft, um gängige Fehler und Stilprobleme zu identifizieren.
+     - **Test:** Die Tests werden ausgeführt.
+     - **Update coverage report:** Ein Testabdeckungsbericht wird erstellt und aktualisiert.
+
+
+## Continuous Deployment (CD)
+
+Die CD-Pipeline wird bei jedem `push` auf den `main`-Branch ausgelöst. Sie baut das Docker-Image des Projekts und pusht es in ein Docker-Repository. Anschließend wird der Dienst auf einem entfernten Server neu gestartet.
+
+### Jobs und Schritte
+
+1. **docker-build**
+   - **Umgebung:** Läuft auf einem Ubuntu-Server mit der neuesten Version.
+   - **Schritte:**
+     - **Checkout Code:** Der aktuelle Code wird ausgecheckt, um mit der Pipeline arbeiten zu können.
+     - **Set up Docker Buildx:** Docker Buildx wird konfiguriert, um das Bauen und Pushen von Docker-Images zu unterstützen.
+     - **Login to Docker Hub:** Es wird eine Anmeldung bei Docker Hub durchgeführt, um die gebauten Images dort ablegen zu können.
+     - **Build and push:** Das Docker-Image wird gebaut und in das Docker Hub Repository gepusht.
+
+2. **start-service**
+   - **Abhängigkeit:** Benötigt den erfolgreichen Abschluss des `docker-build`-Jobs.
+   - **Umgebung:** Läuft auf einem Ubuntu-Server mit der neuesten Version.
+   - **Schritte:**
+     - **Execute remote ssh commands:** Über SSH werden Befehle auf einem entfernten Server ausgeführt. Dabei wird das Docker-Compose-Projekt aktualisiert, der alte Dienst gestoppt, entfernt und der neue Dienst gestartet.
+
+### Sicherheitsaspekte
+
+- Sensitive Informationen wie Docker Hub-Anmeldedaten und SSH-Schlüssel für den entfernten Server werden als GitHub Secrets gespeichert und in den Workflows verwendet.
+
