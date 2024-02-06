@@ -153,7 +153,7 @@ Die CD-Pipeline wird bei jedem `push` auf den `main`-Branch ausgelöst. Sie baut
 - Sensitive Informationen wie Docker Hub-Anmeldedaten und SSH-Schlüssel für den entfernten Server werden als GitHub Secrets gespeichert und in den Workflows verwendet.
 
 
-# Datenmodell
+# Datenmodell
 ![Datenmodell](https://github.com/ELITE-Kinoticketsystem/KTS-Doku/blob/main/Datenstruktur.png)
 Unser Datenmodell ist auf Events ausgerichtet, welches die einmalige Vorstellung eines Films oder mehrerer Filme repräsentiert. Ein Event wird in unserer Datenbank mit einem Start- und Enddatum definiert, um die Dauer des Ereignisses festzulegen. Jedes Event ist einzigartig und wird durch eine ID identifiziert.
 
