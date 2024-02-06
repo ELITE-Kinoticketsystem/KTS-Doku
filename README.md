@@ -152,3 +152,18 @@ Die CD-Pipeline wird bei jedem `push` auf den `main`-Branch ausgelöst. Sie baut
 
 - Sensitive Informationen wie Docker Hub-Anmeldedaten und SSH-Schlüssel für den entfernten Server werden als GitHub Secrets gespeichert und in den Workflows verwendet.
 
+
+# Datenmodell
+![Datenmodell](https://github.com/ELITE-Kinoticketsystem/KTS-Doku/blob/main/Datenstruktur.png)
+Unser Datenmodell ist auf Events ausgerichtet, welches die einmalige Vorstellung eines Films oder mehrerer Filme repräsentiert. Ein Event wird in unserer Datenbank mit einem Start- und Enddatum definiert, um die Dauer des Ereignisses festzulegen. Jedes Event ist einzigartig und wird durch eine ID identifiziert.
+
+Ein Event kann mehrere Filme beinhalten, was durch die Beziehungstabelle event_movies dargestellt wird. Diese verbindet die events-Tabelle mit der movies-Tabelle über die jeweiligen IDs. Die movies-Tabelle enthält wichtige Informationen über die Filme, wie Titel, Beschreibung, Banner, Trailer-URL und Veröffentlichungsdatum.
+Es gibt auch eine genres-Tabelle, die die verschiedenen Filmgenres beinhaltet. Filme können einem oder mehreren Genres zugeordnet werden, was durch die Beziehungstabelle movie_genres dargestellt wird. Schließlich gibt es noch die actors-Tabelle, die Informationen über die Schauspieler enthält, und die movie_actors-Beziehungstabelle, die Schauspieler mit den jeweiligen Filmen verknüpft.
+
+Um die Interaktion mit Kunden zu erleichtern, umfasst unser Modell eine users-Tabelle, die Details wie Benutzername, E-Mail und Passwort für den Login-Prozess speichert. Die Kunden können Bewertungen zu den Filmen abgeben, was in der reviews-Tabelle erfasst wird, die eine Verbindung zur movies-Tabelle und zur users-Tabelle herstellt, um zu verfolgen, welcher Benutzer welche Bewertung abgegeben hat.
+
+Die Events finden in Kinosälen statt, die in der Tabelle cinema_halls mit Eigenschaften wie Kapazität und Abmessungen aufgeführt sind. Diese Säle befinden sich an bestimmten Standorten, die in der addresses-Tabelle definiert sind und über eine Beziehung zur theatres-Tabelle verfügen.
+
+Die Sitzplatzverwaltung wird durch die Tabellen seats, seat_categories, event_seats und event_seat_categories gehandhabt. seats beschreibt die physischen Sitze in einem Kino, während seat_categories die verschiedenen Sitzkategorien (Regular, Vip, Loge) definiert. event_seats verknüpft Sitze mit Events und speichert Informationen darüber, ob und wann ein Sitz reserviert oder ausgewählt wurde. event_seat_categories verbindet die Sitzkategorien mit den spezifischen Events und legt die Preise für die Sitzplätze fest.
+
+Um Transaktionen zu verwalten, gibt es die tickets- und orders-Tabellen, welche die informationen über Käufe von Tickets für Events speichern.
