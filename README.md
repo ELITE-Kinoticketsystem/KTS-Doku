@@ -242,3 +242,45 @@ Die bereitgestellten Endpunkte des Backends lassen sich in 3 Kategorien einteile
 # Buchungsprozess
 
 Der Buchungsprozess beginnt mit der Auswahl einer Veranstaltung. Eine Veranstaltung ist ein Special events oder eine einfache Vorstellungen und findet in einem Kinosaal statt. Deshalb wird man nach Auswahl der Veranstaltung zur Sitzauswahl im Saal weitergeleitet. Hier kann der Benutzer Sitze auswählen, die er buchen oder reservieren möchte. Dabei sind die Sitze, welche bereits von anderen Benutzern belegt wurden ausgegraut und nicht auswählbar. Der Belegt-Zustand ist der Zustand, indem sich der Sitz befindet, wenn er entweder erfolgreich gebucht, reserviert oder blockiert wurde. Und blockiert ist der Sitz, wenn ein Nutzer den Sitz ausgewählt hat und kein anderer Nutzer diesen bereits reserviert, gebucht oder ausgewählt hat. Der Zustand der Blockierung ist zeitgebunden und beträgt initial 15min, jedoch kann durch erfolgreiche Blockierungen weiterer Sitze der Timer neu gestartet werden, was im weiteren Verlauf noch erklärt wird. Des Weiteren ist die Auswahl von Sitzen in verschiedenen Sitzreihen nicht erlaubt, sowie die Auswahl von nicht-benachbarten Sitzen. Das wird verhindert, um Fragmentierung zu vermeiden und somit möglichst große Sitzgruppen von nicht belegten Sitzen zu ermöglichen. Ferner ist hier das grundlegende Problem der Nebenläufigkeit(Doppelbuchungen) derart gelöst, dass bei Auswahl eines Sitzes geprüft wird, ob dieser nicht bereits von anderen Benutzern belegt wurde. Da die Datenbankzugriffe atomar ablaufen und somit sequenzielle Buchungen erzwingen, bleiben die Belegungen konsistent. Bei jedem Seiten-Neustart und jeder versuchten Sitzauswahl, werden die Sitze neu nachgeladen und es wird aktualisiert angezeigt, ob Sitze bereits belegt sind. Es wurde sich für diese Lösung entschieden, um den Mittelweg zwischen Ressourcenverbrauch für das Refreshen minimal zu halten, aber dennoch die User-experience durch das Anzeigen von veralteten Daten möglichst wenig einzuschränken. Ist der Versuch einen Sitz zu buchen erfolgreich, wird der Nutzer über die selection-overview und die Sitzfarbe darauf hingewiesen, dass die Blockierung erfolgreich war. Bei nicht-erfolgreicher Blockierung erscheint ein Warnhinweis mit Erklärung in der Mitte des Bildschirms. Gelingt es dem Nutzer mindestens einen Sitz erfolgreich zu blockieren startet ein 15-min Timer. Dieser Timer gibt an, wie lange der Sitz noch von dem user belegt ist, bevor dieser wieder frei gegeben wird. Bei jeder erfolgreichen neuen Blockierung, startet dieser Timer erneut(15min) und gibt die Zeit an, wie lange alle blockierten Sitze des Benutzers noch belegt sind und somit für andere Nutzer nicht auswählbar sind. Gelingt dem Benutzer mindestens eine erfolgreiche Blockierung, kann er zur Buchung/Reservierung weitergehen. Hier wird nochmals in einer Übersicht angezeigt, welche Sitze er im Moment blockiert. Außerdem wird die Gesamtsumme, sowie die Kosten der einzelnen Tickets angezeigt. Abschließend kann der Benutzer auswählen, ob er die Tickets direkt bezahlen will oder die Sitze lediglich reservieren will. Hierbei ist anzumerken, dass der Timer für die Sitzbelegung nicht neu startet, um einen fairen Buchungsprozess für alle Benutzer zu gewährleisten. In beiden Fällen führt der erfolgreiche Abschluss einer Reservierung oder Bezahlung zu einer permanenten Belegung des Sitzes. Im Anschluss an die Bestätigung durch Bezahlung oder Reservierungsabschluss werden dem Benutzer die Tickets angezeigt, wobei jedes Ticket mit einem QR-Code kommt, welches bei Veranstaltungsbeginn gescannt werden kann, um das Ticket zu authentifizieren.
+
+
+## User Stories
+
+
+Wurde umgesetzt durch
+eine Filterfunktion bei der Filmsuche
+
+
+
+
+
+Wird erlaubt mit der Einschränkung, dass
+Die Sitze benachbart sein müssen und
+In einer Reihe, um die Sitzauslastung zu
+Optimieren.
+
+
+
+
+Durch Einstellungsmöglichkeiten der Sitzpreise,
+Filmauswahl, Titel, Beschreibung, Ticketpreise,
+Kino + Saal, Datum und Uhrzeit, können
+Veranstaltungen individualisiert werden.
+
+
+
+
+Durch Auswahl von Sitztyp:
+- Regular
+- Double
+- Disabled
+und Sitzkategorie können einzelne
+Sitze in einem Grid platziert werden.
+
+
+
+Im Benutzer-Dashboard unter dem
+Ticket-Reiter ist die Ticket-Historie
+einsehbar.
+![image](https://github.com/ELITE-Kinoticketsystem/KTS-Doku/assets/104858641/5ea28894-4c86-4fbc-8113-ea2fa2bd686c)
+
