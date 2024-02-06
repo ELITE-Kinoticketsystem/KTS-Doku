@@ -167,3 +167,73 @@ Die Events finden in Kinosälen statt, die in der Tabelle cinema_halls mit Eigen
 Die Sitzplatzverwaltung wird durch die Tabellen seats, seat_categories, event_seats und event_seat_categories gehandhabt. seats beschreibt die physischen Sitze in einem Kino, während seat_categories die verschiedenen Sitzkategorien (Regular, Vip, Loge) definiert. event_seats verknüpft Sitze mit Events und speichert Informationen darüber, ob und wann ein Sitz reserviert oder ausgewählt wurde. event_seat_categories verbindet die Sitzkategorien mit den spezifischen Events und legt die Preise für die Sitzplätze fest.
 
 Um Transaktionen zu verwalten, gibt es die tickets- und orders-Tabellen, welche die informationen über Käufe von Tickets für Events speichern.
+
+
+# KTS-Anmeldung
+
+## JWT (JSON Web Token)
+
+Wir haben uns dafür entschieden, JWT (JSON Web Tokens) für die Implementierung der Authentifizierung und Autorisierung in unserer Webanwendung aus mehreren Gründen:
+
+**Zustandslosigkeit**: JWTs sind zustandslos, was bedeutet, dass der Server keinen Sitzungsstatus speichern muss. Dies verbessert die Skalierbarkeit der Anwendung und verringert die Last auf dem Server, was besonders wichtig ist, wenn wir mit einem großen Benutzerstrom rechnen.
+
+**Sicherheit**: JWTs bieten eine robuste Sicherheitsschicht, da sie signiert werden können, um sicherzustellen, dass sie nicht manipuliert wurden. Dies erhöht das Vertrauen in die Integrität der übertragenen Daten und schützt vor potenziellen Angriffen wie CSRF (Cross-Site Request Forgery).
+
+**Flexibilität**: JWTs können verschiedene Arten von Nutzlasten (Payloads) enthalten, die für unsere Anwendung spezifische Informationen enthalten können. Dadurch können wir benutzerdefinierte Daten über den Benutzer transportieren und eine personalisierte Benutzererfahrung bieten.
+
+**Einfache Integration**: JWTs basieren auf offenen Standards und können leicht in verschiedene Plattformen und Sprachen integriert werden. Dies ermöglicht eine reibungslose Zusammenarbeit zwischen Frontend- und Backend-Entwicklern und vereinfacht die Wartung und Skalierung unserer Anwendung.
+
+**Token**: Ein JWT-Token besteht aus drei Teilen, die durch Punkte getrennt sind: Header, Payload und Signatur. Diese Teile werden Base64-kodiert und durch Punkte getrennt, um ein JWT-Token zu bilden.
+
+**Refresh-Token**: Ein Refresh-Token ist ein spezielles JWT-Token, das verwendet wird, um ein neues JWT-Token zu erhalten, wenn das alte abgelaufen ist. Dies ermöglicht es uns, die Gültigkeitsdauer unserer JWT-Tokens zu begrenzen und die Sicherheit unserer Anwendung zu erhöhen.
+
+## Registrierung
+
+Die Registrierung erfolgt über die [KTS-Register-Page](https://cinemika.germanywestcentral.cloudapp.azure.com/auth/register).
+Der User ist verpflichtet, folgende Daten anzugeben:
+
+- Vorname
+- Nachname
+- Username
+- E-Mail
+- Passwort, das mindestens 8 Zeichen lang sein muss, mindestens einen Großbuchstaben, einen Kleinbuchstaben, eine Ziffer und ein Sonderzeichen enthalten muss.
+
+Das Fronted schickt die Daten im folgenden Format an das Backend über einen POST-Request an die Route `/auth/register`:
+
+```json
+{
+  "firstName": "Michael",
+  "lastName": "Jordan",
+  "username": "MJ23",
+  "email": "jordan.micheal@nba.com",
+  "password": "Passwort123!"
+}
+```
+
+Nachdem der User die Registrierung abgeschlossen hat, wird eine E-Mail an die angegebene E-Mail-Adresse gesendet, um die Registrierung zu bestätigen. Außerdem wird der User automatisch eingeloggt und erhält einen JWT-Token und einen refreshToken, der über Cookies vom Backend mitgeschickt wird. Er muss sich also nicht nochmal einloggen.
+
+## Anmeldung
+
+Die Anmeldung erfolgt über die [KTS-Login-Page](https://cinemika.germanywestcentral.cloudapp.azure.com/auth/login).
+Der User ist verpflichtet, folgende Daten anzugeben:
+
+- Username
+- Passwort
+
+Das Fronted schickt die Daten im folgenden Format an das Backend über einen POST-Request an die Route `/auth/login`:
+
+```json
+{
+  "username": "MJ23",
+  "password": "Passwort123!"
+}
+```
+
+Sollte das Passwort oder der Username falsch sein, wird ein generischer Fehler zurückgegeben und der User muss die Anmeldung erneut versuchen. Wir haben uns für einen generischen Fehler entschieden, um zu verhindern, dass ein potenzieller Angreifer Informationen über die Gültigkeit von Benutzernamen und Passwörtern erhält.
+Ist die Anmeldung erfolgreich, erhält der User einen JWT-Token und einen refreshToken, der über Cookies vom Backend mitgeschickt wird.
+
+## Authentifizierung
+Die bereitgestellten Endpunkte des Backends lassen sich in 3 Kategorien einteilen:
+- Öffentliche Endpunkte: Diese Endpunkte sind für alle Benutzer zugänglich und erfordern keine Authentifizierung. Beispiele hierfür sind die Registrierung und die Anmeldung.
+- Geschützte Endpunkte: Diese Endpunkte erfordern einen gültigen JWT-Token, um aufgerufen zu werden. Beispiele hierfür sind die Buchungen und das Erstellen von Reviews. Hierfür wird eine middleware verwendet, die vor der eigentlichen Abarbeitung der Anfrage zwischengeschaltet ist. Sie überprüft den JWT-Token und authentifiziert den Benutzer. Außerdem enthält der JWT-Token die UserId des Benutzers, die in diesem Schritt extrahiert wird und an die Anfrage weitergegeben wird. Wenn kein gültiger JWT-Token mitgeschickt wurde, wird der HTTP-Statuscode 401 (Unauthorized) zurückgegeben.
+- Admin-Endpunkte: Diese Endpunkte erfordern eine spezielle Rolle, um aufgerufen zu werden. Beispiele hierfür sind die Endpunkte für das Dashboard sowie das Erstellen von Kinosälen. Auch hier wird eine middleware verwendet, die vor der eigentlichen Abarbeitung der Anfrage zwischengeschaltet ist. Sie überprüft den JWT-Token und die Rolle des Benutzers. Wenn der Benutzer nicht die erforderliche Rolle hat, wird der HTTP-Statuscode 403 (Forbidden) zurückgegeben.
