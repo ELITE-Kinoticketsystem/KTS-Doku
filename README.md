@@ -23,14 +23,14 @@ services:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: KinoTicketSystem
       MYSQL_USER: user
-      MYSQL_PASSWORD: 123456789
+      MYSQL_PASSWORD: password
     ports:
       - 3306:3306
     volumes:
       - db_data:/var/lib/mysql
       - ./init-db.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "user", "--password=123456789"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "user", "--password=password"]
       start_period: 5s
       interval: 5s
       timeout: 5s
