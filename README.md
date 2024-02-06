@@ -1,11 +1,11 @@
 # KTS-Doku
 ## Setup-Anleitung für das Kinoticket-System
-Diese Anleitung beschreibt zwei Methoden zur Einrichtung des Kinoticket-Systems: die Verwendung von [Docker](https://docs.docker.com/desktop/install/mac-install/) und [Docker Compose](https://docs.docker.com/compose/install/) sowie die lokale Einrichtung ohne Docker. Die Docker-Methode wird aufgrund ihrer Einfachheit und Nähe zum Produktionssystem bevorzugt.
+Diese Anleitung beschreibt zwei Methoden zur Einrichtung des Kinoticket-Systems: die Verwendung von Docker und Docker Compose sowie die lokale Einrichtung ohne Docker. Die Docker-Methode wird aufgrund ihrer Einfachheit und Nähe zum Produktionssystem bevorzugt.
 
 ### Lokales Aufsetzen mit Docker
 
 #### Voraussetzungen
-* Docker und Docker Compose müssen auf Ihrem System installiert sein. Die Installationsanleitung variiert je nach Betriebssystem. Anleitungen finden Sie auf den offiziellen Docker-Webseiten für Docker und Docker Compose.
+* Docker und Docker Compose müssen auf Ihrem System installiert sein. Die Installationsanleitung variiert je nach Betriebssystem. Anleitungen finden Sie auf den offiziellen Docker-Webseiten für [Docker](https://docs.docker.com/desktop/install/mac-install/) und [Docker Compose](https://docs.docker.com/compose/install/).
 * Im Rootverzeichnis des Projekts müssen die Dateien docker-compose.yml und init-db.sql vorhanden sein. Der Inhalt der init-db.sql-Datei sollte der hier bereitgestellten [Datei](https://github.com/ELITE-Kinoticketsystem/Backend-KTS/blob/main/database_scripts/create_database.sql) entsprechen.
 
 #### Docker Compose Konfiguration
