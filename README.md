@@ -152,6 +152,34 @@ Die CD-Pipeline wird bei jedem `push` auf den `main`-Branch ausgelöst. Sie baut
 
 - Sensitive Informationen wie Docker Hub-Anmeldedaten und SSH-Schlüssel für den entfernten Server werden als GitHub Secrets gespeichert und in den Workflows verwendet.
 
+# Tech Stack
+
+## Backend
+
+### GoLang
+- **Performance:** Entwickelt von Google, bietet Go hohe Leistung durch kompilierte Sprache. Ist auf hohe Leistung Optimiert
+- **Einfache Syntax:** Go's klare und einfache Syntax fördert schnelle Entwicklung und Wartbarkeit
+- **Effiziente Ressourcennutzung:** Die integrierte Garbage Collection entlastet Entwickler von manuellem Speichermanagement.
+- **Integriertes Testing:** Die Standardbibliothek unterstützt das Schreiben von Tests direkt, was die Robustheit der Anwendung sicherstellt.
+
+### Gin
+- **Schnell:** Gin ist für seine hohe Leistung bekannt, was schnelle Antwortzeiten für Endnutzer bedeutet.
+- **Middleware-Unterstützung:** Ermöglicht die einfache Integration von Funktionalitäten wie Authentifizierung, Logging etc.
+- **JSON-Validierung:** Vereinfacht die Verarbeitung und Validierung eingehender Daten.
+- **Gruppierung von Routen:** Verbessert die Organisation und Übersichtlichkeit der Endpunkte.
+- **Fehler-Management:** Hilft bei der effektiven Handhabung von Anwendungsfehlern.
+
+### Go-Jet
+- **Automatisch generierte Datenmodelltypen:** Erleichtert die Arbeit mit Datenbanktypen und Ergebnissen von Datenbankabfragen.
+- **Typsicherer SQL Builder:** Minimiert Fehler bei der Erstellung von SQL-Queries und unterstützt eine Vielzahl von Anweisungen wie Select, Insert, Update und Delete.
+
+### MySQL
+- **Open-Source und Kostenfreiheit:** Ideal für Projekte mit begrenztem Budget.
+- **Skalierbarkeit und Leistung:** Erfüllt unterschiedliche Anforderungen mit optimierter Leistung.
+- **Umfangreiche Community und Unterstützung:** Zugang zu einem breiten Erfahrungsschatz und kontinuierlicher Entwicklung.
+- **Standards und Interoperabilität:** Ermöglicht einfache Integration in verschiedene Plattformen und Technologien.
+
+
 
 # Datenmodell
 ![Datenmodell](https://github.com/ELITE-Kinoticketsystem/KTS-Doku/blob/main/Datenstruktur.png)
