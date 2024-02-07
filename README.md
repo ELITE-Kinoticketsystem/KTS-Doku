@@ -198,7 +198,7 @@ Die Controller befinden sich im package _controllers_.
 
 4. Die Datenbankanfragen werden über sogenannte Repositories realisiert.
 Dabei wird einem Repository meist eine konkrete Datenbanktabelle zugeordnet, für welche diese zuständig ist.
-Der Zugriff auf diese Tabelle erfolgt daher auschließlich über dieses Repository. Die Repositories sind im package _repositories_ zu finden.
+Der Zugriff auf diese Tabelle erfolgt daher ausschließlich über dieses Repository. Die Repositories sind im package _repositories_ zu finden.
 
 # Datenmodell
 ![Datenmodell](https://github.com/ELITE-Kinoticketsystem/KTS-Doku/blob/main/Datenstruktur.png)
