@@ -274,29 +274,38 @@ Der Buchungsprozess beginnt mit der Auswahl einer Veranstaltung. Eine Veranstalt
 
 ## User Stories
 
+**Anforderung:**
+Als Maria Mutter möchte ich Filme filtern können, weil ich meine Kinder nur Filme gucken lassen, die **FSK sicher** sind.
 
 Wurde umgesetzt durch
 eine Filterfunktion bei der Filmsuche
 
+<img width="137" alt="image" src="https://github.com/ELITE-Kinoticketsystem/KTS-Doku/assets/104858641/9e51ba53-2eb8-44b9-949e-834184883b3b">
 
-
-
+**Anforderung:**
+Als Maria Mutter möchte ich **mehrere Sitze auswählen** können, weil ich mit meiner Familie zusammen sitzen möchte
 
 Wird erlaubt mit der Einschränkung, dass
 Die Sitze benachbart sein müssen und
 In einer Reihe, um die Sitzauslastung zu
 Optimieren.
 
+<img width="164" alt="image" src="https://github.com/ELITE-Kinoticketsystem/KTS-Doku/assets/104858641/a73b9719-7ed6-4413-9869-84c0f644f683">
 
-
+**Anforderung:**
+Als Alex
+Administrator möchte ich **Vorstellungen konfigurieren** können, weil Veranstaltungen sich individuell voneinander unterscheiden.
 
 Durch Einstellungsmöglichkeiten der Sitzpreise,
 Filmauswahl, Titel, Beschreibung, Ticketpreise,
 Kino + Saal, Datum und Uhrzeit, können
 Veranstaltungen individualisiert werden.
 
+<img width="154" alt="image" src="https://github.com/ELITE-Kinoticketsystem/KTS-Doku/assets/104858641/eac63cd5-0782-412e-a983-58aaaf072cfc">
 
-
+**Anforderung:**
+Als Alex
+Administrator möchte ich meine **Kinosäle grafisch abbilden** lassen, weil ich meinen Kunden eine realistische Vorstellung von ihrem Kinoerlebnis im Voraus geben will.
 
 Durch Auswahl von Sitztyp:
 - Regular
@@ -305,10 +314,14 @@ Durch Auswahl von Sitztyp:
 und Sitzkategorie können einzelne
 Sitze in einem Grid platziert werden.
 
+<img width="208" alt="image" src="https://github.com/ELITE-Kinoticketsystem/KTS-Doku/assets/104858641/d2131622-c0c8-4cfd-8542-795d3144a052">
 
+**Anforderung:**
+Als Finja Filmfanatikerin möchte ich meine **Buchungsverläufe einsehen** können, weil ich dadurch mit meinen Freunden austauschen kann, wie oft ich im Kino war und welche Filme ich gesehen habe.
 
 Im Benutzer-Dashboard unter dem
 Ticket-Reiter ist die Ticket-Historie
 einsehbar.
-![image](https://github.com/ELITE-Kinoticketsystem/KTS-Doku/assets/104858641/5ea28894-4c86-4fbc-8113-ea2fa2bd686c)
+
+<img width="223" alt="image" src="https://github.com/ELITE-Kinoticketsystem/KTS-Doku/assets/104858641/9728972a-e76f-4b0c-8b99-369dc3b03a7c">
 
