@@ -179,7 +179,26 @@ Die CD-Pipeline wird bei jedem `push` auf den `main`-Branch ausgelöst. Sie baut
 - **Umfangreiche Community und Unterstützung:** Zugang zu einem breiten Erfahrungsschatz und kontinuierlicher Entwicklung.
 - **Standards und Interoperabilität:** Ermöglicht einfache Integration in verschiedene Plattformen und Technologien.
 
+### Aufbau
+Die Bearbeitung einer Anfrage an das Backend kann in 3 Abschnitte unterteilt werden. Dementsprechend ist der Großteil der Funktionalität des Backends in 3 packages strukturiert.
 
+0. Zunächst wird durch den Router die Route der einkommenden Anfrage überprüft, um dann den jeweiligen spezifischen Handler aufzurufen, der für diese Anfrage zuständig ist. Gegebenenfalls werden vor dem Handler noch middlewares durchlaufen, wie im Abschnitt Authentifizierung erklärt.
+
+1. Der Handler übernimmt die Validierung der Payload.
+Diese kann einerseits im Body der Request im json-Format oder aber als dynamischer Routenparameter, meist in Form einer UUID vorliegen.
+Handelt es sich um syntaktisch inkorrekte oder unerwartete Daten, wird der HTTP-Fehlercode 400 (BAD REQUEST) zurückgegeben.
+Ansonsten werden die Daten an die nächste Stelle, den Controller, weitergegeben.
+Das Ergebnis dieser Operation erhält der Handler zurück und gibt dieses bei Erfolg entweder mit dem Statuscode 200 (OK) oder 201 (CREATED) zurück.
+Die Handler sind im package _handlers_ zu finden.
+
+2. Der Controller erhält vom Handler die syntaktisch validen Daten.
+Er dient zur Bündelung der Datenbankabfragen, da manche Operationen mehrere Datenbankzugriffe erfordern.
+Bei der Erstellung eines Kinosaals muss nämlich zum einen die _cinema_halls_ Tabelle aber auch die _seats_ Tabelle angesprochen werden.
+Die Controller befinden sich im package _controllers_.
+
+4. Die Datenbankanfragen werden über sogenannte Repositories realisiert.
+Dabei wird einem Repository meist eine konkrete Datenbanktabelle zugeordnet, für welche diese zuständig ist.
+Der Zugriff auf diese Tabelle erfolgt daher auschließlich über dieses Repository. Die Repositories sind im package _repositories_ zu finden.
 
 # Datenmodell
 ![Datenmodell](https://github.com/ELITE-Kinoticketsystem/KTS-Doku/blob/main/Datenstruktur.png)
